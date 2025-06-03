@@ -1,0 +1,14 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-net --allow-read --allow-write --watch main.ts",
+    "build-frontend": "cd frontend && npm install && npm run build",
+    "start": "deno run --allow-net --allow-read main.ts"
+  },
+  "importMap": {
+    "imports": {
+      "bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
+      "oak": "https://deno.land/x/oak@v12.6.1/mod.ts",
+      "djwt": "https://deno.land/x/djwt@v2.9.1/mod.ts"
+    }
+  }
+}

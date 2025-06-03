@@ -1,0 +1,54 @@
+# Deno specific
+# main.ts might be your entry point, adjust if needed
+# /deploy.sh and /deploy.cmd are common for Deno Deploy, adjust as needed
+
+# Frontend specific
+sns/frontend/node_modules
+sns/frontend/dist
+
+# IDE specific
+.vscode/
+.idea/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Deno cache and lock files
+deno.lock
+# If you use a local deno cache directory (not recommended for git usually)
+# .deno_cache/
+
+# Compiled output (if any, beyond frontend)
+# Example:
+# /out/
+
+# Environment variables
+.env
+.env*.local
+.env.*.local
+!SSR
+# sns/public is NOT ignored as it's the build output for Deno,
+# but we should ensure only build artifacts go there if possible.
+# Vite's emptyOutDir: true will handle cleaning it.
+# However, if there are other static files Deno serves from public
+# that are NOT from Vite, they should be committed.
+# For now, we assume public is fully managed by Vite output.
+# Add a .gitkeep if you want to keep the public directory if it's ever empty
+# and not managed by Vite (e.g. public/.gitkeep)
+# but since Vite manages it, this might not be needed.
+
+# If you have a SQLite DB file for local dev, e.g. in sns/db/
+sns/db/*.sqlite3
+sns/db/*.db
