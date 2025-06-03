@@ -48,9 +48,18 @@ const Navbar = () => {
       <div>
         {isAuthenticated ? (
           <>
-            {user && <span style={userInfoStyle}>Welcome, {user.Username}!</span>}
+            {user && (
+              <span style={userInfoStyle}>
+                Welcome, {user.Username}!
+                {typeof user.PointsBalance !== 'undefined' && (
+                  <span style={{marginLeft: '10px', borderLeft: '1px solid #555', paddingLeft: '10px'}}>
+                    Points: {user.PointsBalance}
+                  </span>
+                )}
+              </span>
+            )}
             <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
-            <Link to="/my-bookings" style={linkStyle}>My Bookings</Link> {/* Link to My Bookings */}
+            <Link to="/my-bookings" style={linkStyle}>My Bookings</Link>
             <Link to="/create-property" style={linkStyle}>Create Listing</Link>
             <button onClick={handleLogout} style={buttonStyle}>Logout</button>
           </>

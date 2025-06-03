@@ -141,7 +141,7 @@ const PropertyDetails = () => {
       <img src={imageUrl} alt={property.Title || 'Property Image'} style={imageStyle} />
 
       <p><strong>Location:</strong> {property.Address}, {property.City}, {property.Country}</p>
-      <p><strong>Price:</strong> {property.PricePerNight} Points / night</p> {/* Assuming price is in points */}
+      <p><strong>Price:</strong> {property.PricePerNight} Points / night</p>
 
       {isOwner || isAdmin ? (
         <div style={buttonContainerStyle}>
@@ -157,34 +157,44 @@ const PropertyDetails = () => {
           {bookingError && <p style={messageStyle(true)}>{bookingError}</p>}
           {bookingSuccess && <p style={messageStyle(false)}>{bookingSuccess}</p>}
           <div style={datePickerContainerStyle}>
-            <label htmlFor="startDate" style={{marginRight: '5px'}}>Check-in:</label>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              selectsStart
-              startDate={startDate}
-              endDate={endDate}
-              minDate={new Date()}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="Select check-in date"
-              customInput={<CustomDatePickerInput />}
-              id="startDate"
-            />
-            <label htmlFor="endDate" style={{marginRight: '5px', marginLeft: '10px'}}>Check-out:</label>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate ? new Date(new Date(startDate).setDate(startDate.getDate() + 1)) : new Date()}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="Select check-out date"
-              customInput={<CustomDatePickerInput />}
-              id="endDate"
-              disabled={!startDate}
-            />
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+              <label htmlFor="startDate" style={{marginBottom: '3px'}}>Check-in:</label>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+                minDate={new Date()}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="Select check-in date"
+                customInput={<CustomDatePickerInput />}
+                id="startDate"
+              />
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
+              <label htmlFor="endDate" style={{marginBottom: '3px', marginLeft: '10px'}}>Check-out:</label>
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate ? new Date(new Date(startDate).setDate(startDate.getDate() + 1)) : new Date()}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="Select check-out date"
+                customInput={<CustomDatePickerInput />}
+                id="endDate"
+                disabled={!startDate}
+              />
+            </div>
           </div>
+          {startDate && endDate && property.PricePerNight && (
+            <p style={{fontWeight: 'bold', margin: '10px 0'}}>
+              Total: {Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) * property.PricePerNight} Points
+              <span style={{fontSize: '0.9em', fontWeight: 'normal'}}> ({Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24))} nights)</span>
+            </p>
+          )}
           <button onClick={handleBookingSubmit} style={buttonStyle('#28a745')} disabled={!startDate || !endDate}>
             Request to Book
           </button>
