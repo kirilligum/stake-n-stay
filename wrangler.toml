@@ -1,0 +1,11 @@
+name = "my-cloudflare-project"
+main = "functions/api/[[route]].js" # New main entry point for all /api routes
+compatibility_date = "2023-10-30" # Use a recent date
+
+[site]
+bucket = "./public" # Directory for static assets
+
+# Route for all API calls
+[[routes]]
+pattern = "*/api/*" # All API traffic goes to this worker
+service = "my-cloudflare-project" # Name of the worker service (matches 'name' above)

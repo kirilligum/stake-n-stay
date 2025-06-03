@@ -1,0 +1,19 @@
+{
+  "name": "my-cloudflare-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "wrangler dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hono": "^4.7.11"
+  },
+  "devDependencies": {
+    "wrangler": "^4.18.0"
+  }
+}
