@@ -1,0 +1,70 @@
+.banner {
+  background: url('https://media.cntraveler.com/photos/5db1d0dd11c1e500092e7133/master/pass/airbnb-ski-aspen-2019-c0db2b48.jpg') center center;
+  height: 50vh; /* Or 60vh or as desired */
+  position: relative;
+  background-size: cover; /* Ensure the background covers the div */
+  background-position: center; /* Center the background image */
+}
+
+.banner__info {
+  background-color: black;
+  color: white;
+  padding-top: 15vh; /* Adjust to push content down */
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 20px; /* Add some padding at the bottom */
+  width: 350px; /* Or adjust as needed */
+  border-radius: 5px; /* Optional: adds rounded corners */
+  opacity: 0.9; /* Optional: slight transparency */
+}
+
+.banner__info > h1 {
+  font-size: 3rem; /* Adjust size as needed */
+  margin-bottom: 10px;
+}
+
+.banner__info > h5 {
+  margin-top: 0;
+  font-size: 1rem; /* Adjust size as needed */
+  margin-bottom: 20px; /* Space before the button */
+}
+
+/* Style for the MUI button if needed, or use its props */
+.banner__info > .MuiButton-outlined { /* Targeting MUI button specifically */
+  background-color: #ff7779;
+  color: white;
+  text-transform: inherit;
+  margin-top: 20px;
+  font-weight: 600;
+  border: none; /* Remove default border if you want custom */
+}
+
+.banner__info > .MuiButton-outlined:hover {
+  background-color: white;
+  color: #ff7779;
+}
+
+.banner__search {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the button */
+  padding-top: 20px; /* Space from the top of the banner */
+}
+
+.banner__searchButton {
+  background-color: white !important; /* Important to override MUI default */
+  font-weight: 900 !important;
+  text-transform: inherit !important;
+  color: #ff7779 !important;
+  border-radius: 30px !important; /* Make it more pill-shaped */
+  padding: 10px 20px !important; /* Adjust padding */
+  margin-bottom: 10px; /* Space below the button */
+}
+
+/* Placeholder for Search component styling if needed */
+.banner__search > h1 {
+  color: #333; /* Example color */
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}

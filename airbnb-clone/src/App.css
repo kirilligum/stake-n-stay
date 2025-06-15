@@ -1,0 +1,39 @@
+/* Global reset/base styles (optional but common) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f7f7f7; /* Light gray background for the whole page */
+  color: #333; /* Default text color */
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure app takes at least full viewport height */
+}
+
+.app-content { /* Updated class name from app__body */
+  flex-grow: 1; /* Allows the main content area to expand and push footer down */
+  padding-top: 75px; /* Adjust based on actual Header height to prevent overlap if Header is fixed/sticky */
+  /* If Footer is also fixed, add padding-bottom as well */
+  /* background-color: white; /* Or keep it transparent to see body background */
+}
+
+/* Example of how you might ensure content is centered and has max-width */
+/* You might apply this to specific page containers instead */
+/*
+.main-content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+*/

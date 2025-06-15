@@ -1,0 +1,80 @@
+.homePage {
+  /* No specific styling for the overall page container yet,
+     can be added if global layout needs adjustments e.g. max-width */
+}
+
+.homePage__section {
+  display: flex;
+  padding: 30px;
+  overflow-x: auto; /* Allow horizontal scrolling if cards overflow */
+  justify-content: center; /* Center cards if they don't fill the width */
+  flex-wrap: wrap; /* Allow cards to wrap to next line on smaller screens */
+}
+
+/* Optional: if you want a more standard row layout that wraps */
+.homePage__section--cards {
+  display: flex;
+  flex-wrap: wrap; /* Wrap cards to the next line */
+  justify-content: space-around; /* Distribute space around cards */
+  padding: 20px;
+}
+
+
+.homePage__section h2 {
+  margin: 0 auto 20px auto; /* Center title, add bottom margin */
+  text-align: center;
+  width: 100%; /* Ensure it takes full width to center properly */
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.homePage__section--liveAnywhere {
+  padding-top: 40px; /* More space above this section */
+  padding-bottom: 40px;
+  background-color: #f7f7f7; /* Slight background tint for this section */
+  display: flex;
+  flex-direction: column; /* Stack title above cards */
+  align-items: center; /* Center content */
+}
+
+.homePage__liveAnywhereCards {
+  display: flex;
+  justify-content: center; /* Center the group of cards */
+  flex-wrap: wrap; /* Allow wrapping */
+  gap: 20px; /* Adds space between cards */
+}
+
+/* Styling for cards within the "Live anywhere" section specifically */
+/* These cards might be smaller or have a different style */
+.homePage__section--liveAnywhere .card {
+  max-width: 250px; /* Smaller cards for this section */
+  /* Add any other specific styles for these cards */
+}
+
+.homePage__section--liveAnywhere .card img {
+  height: 180px; /* Adjust image height for smaller cards */
+}
+
+.homePage__section--liveAnywhere .card__info h2 {
+  font-size: 1rem; /* Smaller title for these cards */
+}
+
+/* Hide description and price for "Live Anywhere" cards if not needed */
+.homePage__section--liveAnywhere .card__info h4,
+.homePage__section--liveAnywhere .card__info h3 {
+  display: none;
+}
+
+/* Scrollbar styling for horizontal sections (optional) */
+.homePage__section::-webkit-scrollbar {
+  height: 8px;
+}
+
+.homePage__section::-webkit-scrollbar-thumb {
+  background-color: #ff7779;
+  border-radius: 10px;
+}
+
+.homePage__section::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}

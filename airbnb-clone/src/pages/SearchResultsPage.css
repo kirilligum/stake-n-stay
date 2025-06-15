@@ -1,0 +1,70 @@
+.searchResultsPage {
+  padding: 20px;
+  max-width: 1200px; /* Max width for content area */
+  margin: 0 auto; /* Center the content */
+}
+
+.searchResultsPage > h1 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.searchResultsPage > p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.searchResultsPage__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 15px;
+}
+
+.searchResultsPage__infoCount {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.searchResultsPage__buttons > .MuiButton-root { /* Targeting MUI buttons */
+  margin-left: 10px;
+  text-transform: inherit;
+  border-radius: 30px;
+}
+
+.searchResultsPage__results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Space between cards */
+  justify-content: center; /* Center cards if they don't fill the row */
+}
+
+/* If using the same Card component, it will inherit its styles.
+   If you create a SearchResultCard or similar, style it here.
+   Example:
+.searchResultCard {
+  display: flex;
+  margin-bottom: 20px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.searchResultCard__img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.searchResultCard__info {
+  padding: 20px;
+  flex: 1;
+}
+*/
