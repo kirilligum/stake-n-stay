@@ -13,12 +13,16 @@ export async function signup(ctx: Context) {
     // Basic validation
     if (!username || !email || !password) {
       ctx.response.status = 400; // Bad Request
-      ctx.response.body = { error: "Username, email, and password are required." };
+      ctx.response.body = {
+        error: "Username, email, and password are required.",
+      };
       return;
     }
 
     // Check for existing user
-    if (users.some(user => user.username === username || user.email === email)) {
+    if (
+      users.some((user) => user.username === username || user.email === email)
+    ) {
       ctx.response.status = 409; // Conflict
       ctx.response.body = { error: "Username or email already exists." };
       return;
@@ -42,15 +46,23 @@ export async function signup(ctx: Context) {
     // Return success response (excluding passwordHash)
     const { passwordHash: _, ...userResponse } = newUser;
     ctx.response.status = 201; // Created
-    ctx.response.body = { message: "User created successfully", user: userResponse };
-
+    ctx.response.body = {
+      message: "User created successfully",
+      user: userResponse,
+    };
   } catch (error) {
     console.error("Signup error:", error);
     ctx.response.status = 500;
     ctx.response.body = { error: "Internal server error during signup." };
-    if (error instanceof TypeError && error.message.includes("Cannot destructure property")) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Invalid request body. Expected JSON with username, email, and password." };
+    if (
+      error instanceof TypeError &&
+      error.message.includes("Cannot destructure property")
+    ) {
+      ctx.response.status = 400;
+      ctx.response.body = {
+        error:
+          "Invalid request body. Expected JSON with username, email, and password.",
+      };
     }
   }
 }
@@ -62,11 +74,15 @@ export async function login(ctx: Context) {
 
     if (!password || (!email && !username)) {
       ctx.response.status = 400; // Bad Request
-      ctx.response.body = { error: "Password and either email or username are required." };
+      ctx.response.body = {
+        error: "Password and either email or username are required.",
+      };
       return;
     }
 
-    const user = users.find(u => u.email === email || u.username === username);
+    const user = users.find((u) =>
+      u.email === email || u.username === username
+    );
 
     if (!user) {
       ctx.response.status = 401; // Unauthorized
@@ -80,9 +96,10 @@ export async function login(ctx: Context) {
       const isAdmin = user.id === 1; // First user is admin
 
       // Ensure we get the latest points_balance from the users array, which is the authoritative source
-      const authoritativeUser = users.find(u => u.id === user.id);
-      const currentPointsBalance = authoritativeUser ? authoritativeUser.points_balance : user.points_balance;
-
+      const authoritativeUser = users.find((u) => u.id === user.id);
+      const currentPointsBalance = authoritativeUser
+        ? authoritativeUser.points_balance
+        : user.points_balance;
 
       const payload: djwt.Payload = {
         user_id: user.id, // Ensure this is consistently named
@@ -103,20 +120,22 @@ export async function login(ctx: Context) {
       ctx.response.body = {
         message: "Login successful",
         token,
-        user: { id: user.id, username: user.username, email: user.email }
+        user: { id: user.id, username: user.username, email: user.email },
       };
     } else {
       ctx.response.status = 401; // Unauthorized
       ctx.response.body = { error: "Invalid credentials." };
     }
-
   } catch (error) {
     console.error("Login error:", error);
     ctx.response.status = 500;
     ctx.response.body = { error: "Internal server error during login." };
-    if (error instanceof TypeError && error.message.includes("Cannot destructure property")) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Invalid request body. Expected JSON." };
+    if (
+      error instanceof TypeError &&
+      error.message.includes("Cannot destructure property")
+    ) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Invalid request body. Expected JSON." };
     }
   }
 }

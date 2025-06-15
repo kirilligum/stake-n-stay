@@ -23,34 +23,42 @@ export async function createListing(ctx: Context) {
   try {
     const user = ctx.state.user as any; // Populated by authMiddleware
     if (!user || !user.user_id) {
-        ctx.response.status = 401;
-        ctx.response.body = { error: "User not authenticated properly." };
-        return;
+      ctx.response.status = 401;
+      ctx.response.body = { error: "User not authenticated properly." };
+      return;
     }
 
     const body = ctx.request.body({ type: "json" });
     const {
-        title,
-        description,
-        price_per_night_points,
-        address, // Added
-        max_guests, // Added
-        amenities, // Added
-        photos // Added
+      title,
+      description,
+      price_per_night_points,
+      address, // Added
+      max_guests, // Added
+      amenities, // Added
+      photos, // Added
     } = await body.value;
 
     // Basic validation
-    if (!title || !description || price_per_night_points === undefined || !address) {
+    if (
+      !title || !description || price_per_night_points === undefined || !address
+    ) {
       ctx.response.status = 400; // Bad Request
-      ctx.response.body = { error: "Title, description, address, and price_per_night_points are required." };
+      ctx.response.body = {
+        error:
+          "Title, description, address, and price_per_night_points are required.",
+      };
       return;
     }
-    if (typeof price_per_night_points !== 'number' || price_per_night_points <= 0) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Price per night must be a positive number." };
-        return;
+    if (
+      typeof price_per_night_points !== "number" || price_per_night_points <= 0
+    ) {
+      ctx.response.status = 400;
+      ctx.response.body = {
+        error: "Price per night must be a positive number.",
+      };
+      return;
     }
-
 
     const newListing: Listing = {
       id: uuidv4.generate(), // Generate a UUID for the listing
@@ -70,15 +78,24 @@ export async function createListing(ctx: Context) {
     console.log("Listings DB:", listings_db); // For debugging
 
     ctx.response.status = 201; // Created
-    ctx.response.body = { message: "Listing created successfully", listing: newListing };
-
+    ctx.response.body = {
+      message: "Listing created successfully",
+      listing: newListing,
+    };
   } catch (error) {
     console.error("Create listing error:", error);
     ctx.response.status = 500;
-    ctx.response.body = { error: "Internal server error during listing creation." };
-     if (error instanceof TypeError && error.message.includes("Cannot destructure property")) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Invalid request body. Expected JSON with listing details." };
+    ctx.response.body = {
+      error: "Internal server error during listing creation.",
+    };
+    if (
+      error instanceof TypeError &&
+      error.message.includes("Cannot destructure property")
+    ) {
+      ctx.response.status = 400;
+      ctx.response.body = {
+        error: "Invalid request body. Expected JSON with listing details.",
+      };
     }
   }
 }
@@ -98,16 +115,16 @@ export async function updateListing(ctx: Context) {
   try {
     const user = ctx.state.user as any;
     if (!user || !user.user_id) {
-        ctx.response.status = 401;
-        ctx.response.body = { error: "User not authenticated properly." };
-        return;
+      ctx.response.status = 401;
+      ctx.response.body = { error: "User not authenticated properly." };
+      return;
     }
 
     const { id } = ctx.params;
     if (!id) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Listing ID is required for update." };
-        return;
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Listing ID is required for update." };
+      return;
     }
 
     const body = ctx.request.body({ type: "json" });
@@ -119,14 +136,19 @@ export async function updateListing(ctx: Context) {
       ctx.response.body = { error: "No update data provided." };
       return;
     }
-    if (updates.price_per_night_points !== undefined && (typeof updates.price_per_night_points !== 'number' || updates.price_per_night_points <= 0)) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Price per night must be a positive number." };
-        return;
+    if (
+      updates.price_per_night_points !== undefined &&
+      (typeof updates.price_per_night_points !== "number" ||
+        updates.price_per_night_points <= 0)
+    ) {
+      ctx.response.status = 400;
+      ctx.response.body = {
+        error: "Price per night must be a positive number.",
+      };
+      return;
     }
 
-
-    const listingIndex = listings_db.findIndex(l => l.id === id);
+    const listingIndex = listings_db.findIndex((l) => l.id === id);
     if (listingIndex === -1) {
       ctx.response.status = 404;
       ctx.response.body = { error: "Listing not found." };
@@ -138,37 +160,56 @@ export async function updateListing(ctx: Context) {
     // Ownership check: Only the admin who created the listing can update it
     if (listingToUpdate.admin_id !== user.user_id) {
       ctx.response.status = 403; // Forbidden
-      ctx.response.body = { error: "You are not authorized to update this listing." };
+      ctx.response.body = {
+        error: "You are not authorized to update this listing.",
+      };
       return;
     }
 
     // Apply updates - only allow certain fields to be updated
-    const allowedUpdates = ["title", "description", "address", "price_per_night_points", "max_guests", "amenities", "photos"];
+    const allowedUpdates = [
+      "title",
+      "description",
+      "address",
+      "price_per_night_points",
+      "max_guests",
+      "amenities",
+      "photos",
+    ];
     let updated = false;
     for (const key of allowedUpdates) {
-        if (updates[key] !== undefined) {
-            (listingToUpdate as any)[key] = updates[key];
-            updated = true;
-        }
+      if (updates[key] !== undefined) {
+        (listingToUpdate as any)[key] = updates[key];
+        updated = true;
+      }
     }
 
     if (updated) {
-        listingToUpdate.updated_at = new Date().toISOString();
+      listingToUpdate.updated_at = new Date().toISOString();
     }
 
     listings_db[listingIndex] = listingToUpdate;
     console.log("Updated Listing:", listingToUpdate); // For debugging
 
     ctx.response.status = 200; // OK
-    ctx.response.body = { message: "Listing updated successfully", listing: listingToUpdate };
-
+    ctx.response.body = {
+      message: "Listing updated successfully",
+      listing: listingToUpdate,
+    };
   } catch (error) {
     console.error("Update listing error:", error);
     ctx.response.status = 500;
-    ctx.response.body = { error: "Internal server error during listing update." };
-    if (error instanceof TypeError && error.message.includes("Cannot destructure property")) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Invalid request body. Expected JSON with listing details." };
+    ctx.response.body = {
+      error: "Internal server error during listing update.",
+    };
+    if (
+      error instanceof TypeError &&
+      error.message.includes("Cannot destructure property")
+    ) {
+      ctx.response.status = 400;
+      ctx.response.body = {
+        error: "Invalid request body. Expected JSON with listing details.",
+      };
     }
   }
 }
@@ -176,20 +217,20 @@ export async function updateListing(ctx: Context) {
 export async function deleteListing(ctx: Context) {
   try {
     const user = ctx.state.user as any;
-     if (!user || !user.user_id) {
-        ctx.response.status = 401;
-        ctx.response.body = { error: "User not authenticated properly." };
-        return;
+    if (!user || !user.user_id) {
+      ctx.response.status = 401;
+      ctx.response.body = { error: "User not authenticated properly." };
+      return;
     }
 
     const { id } = ctx.params;
-     if (!id) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Listing ID is required for deletion." };
-        return;
+    if (!id) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Listing ID is required for deletion." };
+      return;
     }
 
-    const listingIndex = listings_db.findIndex(l => l.id === id);
+    const listingIndex = listings_db.findIndex((l) => l.id === id);
 
     if (listingIndex === -1) {
       ctx.response.status = 404; // Not Found
@@ -200,7 +241,9 @@ export async function deleteListing(ctx: Context) {
     // Ownership check: Only the admin who created the listing can delete it
     if (listings_db[listingIndex].admin_id !== user.user_id) {
       ctx.response.status = 403; // Forbidden
-      ctx.response.body = { error: "You are not authorized to delete this listing." };
+      ctx.response.body = {
+        error: "You are not authorized to delete this listing.",
+      };
       return;
     }
 
@@ -209,11 +252,12 @@ export async function deleteListing(ctx: Context) {
 
     ctx.response.status = 204; // No Content
     // No body needed for 204
-
   } catch (error) {
     console.error("Delete listing error:", error);
     ctx.response.status = 500;
-    ctx.response.body = { error: "Internal server error during listing deletion." };
+    ctx.response.body = {
+      error: "Internal server error during listing deletion.",
+    };
   }
 }
 
@@ -221,12 +265,12 @@ export async function getListingById(ctx: Context) {
   try {
     const { id } = ctx.params;
     if (!id) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Listing ID is required." };
-        return;
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Listing ID is required." };
+      return;
     }
 
-    const listing = listings_db.find(l => l.id === id);
+    const listing = listings_db.find((l) => l.id === id);
 
     if (listing) {
       ctx.response.status = 200;

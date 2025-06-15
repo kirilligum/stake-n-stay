@@ -49,7 +49,9 @@ app.use(async (ctx, next) => {
     if (e.name === "NotFound" || e.status === 404) { // Oak's send might throw different error types
       await next();
     } else {
-      console.error(`Error in static file middleware: ${e.name} - ${e.message}`);
+      console.error(
+        `Error in static file middleware: ${e.name} - ${e.message}`,
+      );
       throw e;
     }
   }
@@ -57,7 +59,10 @@ app.use(async (ctx, next) => {
 
 // SPA catch-all for GET requests
 app.use(async (ctx, next) => {
-  if (ctx.request.method === "GET" && !ctx.response.body && ctx.request.accepts("html") && !ctx.request.url.pathname.startsWith("/api")) {
+  if (
+    ctx.request.method === "GET" && !ctx.response.body &&
+    ctx.request.accepts("html") && !ctx.request.url.pathname.startsWith("/api")
+  ) {
     try {
       await send(ctx, "/index.html", {
         root: `${Deno.cwd()}/public`,
@@ -66,14 +71,14 @@ app.use(async (ctx, next) => {
       console.error("Error serving SPA index.html:", e);
       // Let Oak handle the error response if index.html is truly not found or other error occurs
       if (e.name === "NotFound" || e.status === 404) {
-          ctx.response.status = 404;
-          ctx.response.body = "SPA Fallback: index.html not found.";
+        ctx.response.status = 404;
+        ctx.response.body = "SPA Fallback: index.html not found.";
       } else {
-          throw e;
+        throw e;
       }
     }
   } else {
-      await next(); // If not a GET request for HTML or if an API route was already matched, or if body already set.
+    await next(); // If not a GET request for HTML or if an API route was already matched, or if body already set.
   }
 });
 

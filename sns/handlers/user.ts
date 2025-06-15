@@ -8,6 +8,8 @@ export async function getMe(ctx: Context) {
   } else {
     // This case should ideally not be reached if authMiddleware is applied correctly
     ctx.response.status = 401;
-    ctx.response.body = { error: "No user data found. Authentication required." };
+    ctx.response.body = {
+      error: "No user data found. Authentication required.",
+    };
   }
 }

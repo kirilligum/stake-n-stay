@@ -1,4 +1,4 @@
-import { djwt, Context, Middleware } from "../deps.ts";
+import { Context, djwt, Middleware } from "../deps.ts";
 import { jwtKey } from "../config.ts";
 
 export const authMiddleware: Middleware = async (ctx: Context, next) => {
@@ -6,7 +6,9 @@ export const authMiddleware: Middleware = async (ctx: Context, next) => {
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     ctx.response.status = 401; // Unauthorized
-    ctx.response.body = { error: "Authorization header is missing or malformed." };
+    ctx.response.body = {
+      error: "Authorization header is missing or malformed.",
+    };
     return;
   }
 
@@ -25,20 +27,22 @@ export const authMiddleware: Middleware = async (ctx: Context, next) => {
   } catch (error) {
     console.error("Auth middleware error:", error.message);
     if (error instanceof djwt.errors.Expired) {
-        ctx.response.status = 401;
-        ctx.response.body = { error: "Token has expired." };
+      ctx.response.status = 401;
+      ctx.response.body = { error: "Token has expired." };
     } else if (error instanceof djwt.errors.Invalid) {
-        ctx.response.status = 401;
-        ctx.response.body = { error: "Invalid token." };
-    }
-    else {
-        ctx.response.status = 401; // Unauthorized
-        ctx.response.body = { error: "Token verification failed." };
+      ctx.response.status = 401;
+      ctx.response.body = { error: "Invalid token." };
+    } else {
+      ctx.response.status = 401; // Unauthorized
+      ctx.response.body = { error: "Token verification failed." };
     }
   }
 };
 
-export const adminRequiredMiddleware: Middleware = async (ctx: Context, next) => {
+export const adminRequiredMiddleware: Middleware = async (
+  ctx: Context,
+  next,
+) => {
   // This middleware should run AFTER authMiddleware, so ctx.state.user should be populated.
   if (!ctx.state.user || !(ctx.state.user as any).is_admin) {
     ctx.response.status = 403; // Forbidden

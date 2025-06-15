@@ -6,15 +6,15 @@ export const JWT_SECRET_KEY = "your-super-secret-and-long-enough-key";
 
 // Helper function to create a CryptoKey from a secret string
 async function createCryptoKey(secret: string): Promise<CryptoKey> {
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(secret);
-    return await crypto.subtle.importKey(
-        "raw",
-        keyData,
-        { name: "HMAC", hash: "SHA-256" },
-        false, // not extractable
-        ["sign", "verify"]
-    );
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(secret);
+  return await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    { name: "HMAC", hash: "SHA-256" },
+    false, // not extractable
+    ["sign", "verify"],
+  );
 }
 
 export const jwtKey = await createCryptoKey(JWT_SECRET_KEY);
